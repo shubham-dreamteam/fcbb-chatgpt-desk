@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Dreamteam CRM (FCBB Desk)
+  version: 1.0.0
+  description: Read and write Dreamteam records. Never delete. Docs https://docs.dreamteam.co/api/
+servers:
+  - url: https://api.dreamteamcrm.ai/api/v1
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer }
+  parameters:
+    type: { name: type, in: path, required: true, schema: { type: string, enum: [company, contact, deal, offers, task, note] } }
+    id: { name: id, in: path, required: true, schema: { type: integer } }
+security: [ { bearer: [] } ]
+paths:
+  /objects/{type}:
+    get: { operationId: describeObject, summary: Fields and dropdown ids, parameters: [ { $ref: '#/components/parameters/type' } ], responses: { '200': { description: OK } } }
+  /objects/{type}/associations:
+    get: { operationId: listAssociations, summary: Valid links, parameters: [ { $ref: '#/components/parameters/type' } ], responses: { '200': { description: OK } } }
+  /objects/{type}/records:
+    get:
+      operationId: listRecords
+      summary: List records (page starts at 1, page_size max 100)
+      parameters:
+        - $ref: '#/components/parameters/type'
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: page_size, in: query, schema: { type: integer, default: 100 } }
+      responses: { '200': { description: OK } }
+    post:
+      operationId: createRecord
+      summary: Create a record. Body {"properties":{...}}
+      parameters: [ { $ref: '#/components/parameters/type' } ]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, properties: { properties: { type: object } }, required: [properties] } } } }
+      responses: { '200': { description: OK } }
+  /objects/{type}/records/{id}:
+    get: { operationId: getRecord, summary: One record, parameters: [ { $ref: '#/components/parameters/type' }, { $ref: '#/components/parameters/id' } ], responses: { '200': { description: OK } } }
+    patch:
+      operationId: updateRecord
+      summary: Update some fields. Body {"properties":{...}}
+      parameters: [ { $ref: '#/components/parameters/type' }, { $ref: '#/components/parameters/id' } ]
+      requestBody: { required: true, content: { application/merge-patch+json: { schema: { type: object, properties: { properties: { type: object } }, required: [properties] } } } }
+      responses: { '200': { description: OK } }
+  /objects/{type}/records/filter:
+    post:
+      operationId: findRecords
+      summary: 'Find records. Body {"filter_groups":[{"filters":[{"field_path":"name","operator":"CONTAINS","value":"Mesa"}]}],"pagination":{"page":1,"page_size":100}}'
+      parameters: [ { $ref: '#/components/parameters/type' } ]
+      requestBody: { required: true, content: { application/json: { schema: { type: object } } } }
+      responses: { '200': { description: OK } }
+  /pipelines/{id}:
+    get: { operationId: getPipeline, summary: Pipeline with stages, parameters: [ { $ref: '#/components/parameters/id' } ], responses: { '200': { description: OK } } }
+  /users:
+    get: { operationId: listUsers, summary: Workspace users, responses: { '200': { description: OK } } }
