@@ -6,12 +6,19 @@ Paste everything below the line into ChatGPT (type `@Sites` first). Attach nothi
 
 @Sites Build **FCBB Desk**, a private web app for Tony Shurter, business broker at First Choice Business Brokers Albuquerque. It shows his live pipeline from Dreamteam CRM (workspace `fcbb.dreamteamcrm.ai`).
 
+**How to work: build the whole thing in one go, without stopping.**
+- Do not ask me questions. The only thing you may ask for is the Dreamteam API token, once, as a Sites secret named `DT_API_KEY`. Ask for it the moment you need it, then keep going.
+- Everything else, decide yourself using this prompt, the reference page and the docs. When something is unclear, pick the option closest to the reference page, note it in one line in your final summary, and move on.
+- Don't stop to show me plans, drafts, partial versions or options. Don't ask "should I continue?" or "would you like me to…". Just continue.
+- If something fails (an API call, a field name, a link read, a build error), debug it yourself: read the docs, call the endpoint, inspect the response, fix, retry. Only stop if the token is rejected (401) after I've given it.
+- You're done only when the site is built, deployed privately, loads live fcbb data, the refresh icon works, and you've run the checks at the end yourself.
+
 **Design.** Copy this reference page exactly (layout, colours, fonts, tabs, deal page, phone layout). It has made-up sample data in arrays at the top of its script; replace those with live data from the server:
 https://raw.githubusercontent.com/shubham-dreamteam/fcbb-chatgpt-desk/main/ui/fcbb-desk-reference.html
 
 **Data source.** Dreamteam REST API, docs: https://docs.dreamteam.co/api/ (read Authentication, Records, Find Records, Schema, Pipelines, Pagination, Errors before coding). Full field and stage map: https://raw.githubusercontent.com/shubham-dreamteam/fcbb-chatgpt-desk/main/FCBB-DESK.md (Part 4 and Part 11).
 - Base `https://api.dreamteamcrm.ai/api/v1`, header `Authorization: Bearer <DT_API_KEY>`.
-- Store the token as a **Sites secret** named `DT_API_KEY`. I will paste it in the Sites panel. Never put it in code, the page, the browser, logs or responses.
+- Store the token as a **Sites secret** named `DT_API_KEY` (the one thing you ask me for). Never put it in code, the page, the browser, logs or responses.
 - **All Dreamteam calls run on the server** (the site's Worker), never from the browser.
 
 **Server endpoint** `GET /api/desk`: calls Dreamteam and returns one JSON object shaped like the reference arrays (`leads`, `deals` with `offers`, `pool` of buyers, `lenders`, `replies`, `followups`, `moves`), plus `refreshedAt`.
@@ -33,4 +40,11 @@ https://raw.githubusercontent.com/shubham-dreamteam/fcbb-chatgpt-desk/main/ui/fc
 
 **Rules.** Never show any email address of Tony's except `tony.shurter@fcbb.com`. Short labels. Works at phone width.
 
-**Before you deploy**, show me a saved version and check: the counts on Today match Dreamteam (companies by type, deals per stage, offers), refresh changes the time and pulls a record I just edited in Dreamteam, and the token appears nowhere in the page source or network responses.
+**Finish by checking it yourself**, fixing anything that fails, and redeploying until all pass:
+1. `/api/desk` returns data with row counts equal to each list's `metadata.total_elements`.
+2. Every tab renders with real data at desktop and phone width, with no console errors.
+3. The refresh icon fetches fresh data, updates the sync time and redraws without a reload.
+4. The token appears nowhere in the page source, the browser's network responses or logs.
+5. The site is private (owner and admins only).
+
+Then reply with only: the site URL, the counts it shows (companies by type, deals per stage, offers), and any judgment calls you made, one line each.
