@@ -9,6 +9,5 @@ cat parts/*.md > FCBB-DESK.md
   sed '1d' parts/04-data-model.md
   echo; echo '## Appendix B. Dreamteam REST API'; echo
   awk 'NR>1 && /^## Custom GPT/{exit} NR>1' parts/11-rest-api.md
-  echo; echo '## Appendix C. Reference page (copy this design; its data is made up)'; echo
-  echo '```html'; cat ui/fcbb-desk-reference.html; echo '```'; } > SITES-PROMPT.md
+  } > SITES-PROMPT.md
 wc -c FCBB-DESK.md SETUP.md SITES-PROMPT.md

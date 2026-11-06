@@ -1,17 +1,18 @@
-@Sites` first). Attach nothing; the links are public.
-
----
-
 @Sites Build **FCBB Desk**, a private web app for Tony Shurter, business broker at First Choice Business Brokers Albuquerque. It shows his live pipeline from Dreamteam CRM (workspace `fcbb.dreamteamcrm.ai`).
 
 **How to work: build the whole thing in one go, without stopping.**
 - Do not ask me questions. The only thing you may ask for is the Dreamteam API token, once, as a Sites secret named `DT_API_KEY`. Ask for it the moment you need it, then keep going.
-- Everything else, decide yourself using this message and its appendices. When something is unclear, pick the option closest to the reference page, note it in one line in your final summary, and move on.
+- Everything else, decide yourself using this message and its appendices; for look and layout, use your own judgment. When something is unclear, pick the option closest to the reference page, note it in one line in your final summary, and move on.
 - Don't stop to show me plans, drafts, partial versions or options. Don't ask "should I continue?" or "would you like me to…". Just continue.
 - If something fails (an API call, a field name, a link read, a build error), debug it yourself: read the docs, call the endpoint, inspect the response, fix, retry. Only stop if the token is rejected (401) after I've given it.
 - You're done only when the site is built, deployed privately, loads live fcbb data, the refresh icon works, and you've run the checks at the end yourself.
 
-**Design.** Copy the reference page in **Appendix C** exactly (layout, colours, fonts, tabs, deal page, phone layout). It has made-up sample data in arrays at the top of its script (`pool`, `deals`, `moves`, `leads`, `replies`, `followups`, `lenders`); replace those with live data from the server and keep the drawing code.
+**What it shows.** Design it yourself: clean, calm, easy to scan on a phone. Screens:
+- **Today:** people waiting on a reply, open leads by status, suggested stage moves, businesses listed and buyers on them.
+- **New leads:** contacts not yet Qualified or Disqualified: business, person, Seller or Buyer, town, source, date, a "New" badge.
+- **Replies:** who needs a reply (oldest first, days waiting, what they asked) and who Tony is waiting on.
+- **Deals:** a board by deal stage. Each card: listing number, business, asking price, number of buyers. Click opens a deal page: seller, price and 12.5% fee, stage bar, each buyer's offer stage from Inquiry to Funded (backups and withdrawn marked), recent emails.
+- **Buyers, Lenders, Partners:** one list each with contact, what they want or do, and last contact date.
 
 **Data source.** Dreamteam REST API, docs: https://docs.dreamteam.co/api/ (read Authentication, Records, Find Records, Schema, Pipelines, Pagination, Errors before coding). Everything you need is in this message: the field, id and stage map is **Appendix A**, and the API rules are **Appendix B**. The docs link is for extra detail only.
 - Base `https://api.dreamteamcrm.ai/api/v1`, header `Authorization: Bearer <DT_API_KEY>`.
