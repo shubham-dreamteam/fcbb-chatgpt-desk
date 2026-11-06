@@ -2,7 +2,7 @@
 
 **How to work: build the whole thing in one go, without stopping.**
 - Do not ask me questions. The only thing you may ask for is the Dreamteam API token, once, as a Sites secret named `DT_API_KEY`. Ask for it the moment you need it, then keep going.
-- Everything else, decide yourself using this message and its appendices; for look and layout, use your own judgment. When something is unclear, pick the option closest to the reference page, note it in one line in your final summary, and move on.
+- Everything else, decide yourself using this message and its appendices; for look and layout, use your own judgment. When something is unclear, pick the simplest option that serves Tony, note it in one line in your final summary, and move on.
 - Don't stop to show me plans, drafts, partial versions or options. Don't ask "should I continue?" or "would you like me to…". Just continue.
 - If something fails (an API call, a field name, a link read, a build error), debug it yourself: read the docs, call the endpoint, inspect the response, fix, retry. Only stop if the token is rejected (401) after I've given it.
 - You're done only when the site is built, deployed privately, loads live fcbb data, the refresh icon works, and you've run the checks at the end yourself.
